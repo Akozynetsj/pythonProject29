@@ -1,46 +1,25 @@
 import logging
 
-class Calculator:
+class DataRecorder:
     def __init__(self):
-        self.logger = logging.getLogger('Calculator')
+        self.logger = logging.getLogger('DataRecorder')
         self.logger.setLevel(logging.INFO)
-        console_handler = logging.StreamHandler()
-        console_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        console_handler.setFormatter(console_formatter)
-        self.logger.addHandler(console_handler)
+        file_handler = logging.FileHandler('data.log')
+        file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(file_formatter)
+        self.logger.addHandler(file_handler)
 
-    def add(self, a, b):
-        result = a + b
-        self.logger.info(f"Add: {a} + {b} = {result}")
-        return result
-
-    def subtract(self, a, b):
-        result = a - b
-        self.logger.info(f"Subtract: {a} - {b} = {result}")
-        return result
-
-    def multiply(self, a, b):
-        result = a * b
-        self.logger.info(f"Multiply: {a} * {b} = {result}")
-        return result
-
-    def divide(self, a, b):
-        if b != 0:
-            result = a / b
-            self.logger.info(f"Divide: {a} / {b} = {result}")
-            return result
-        else:
-            self.logger.error("Divide by zero error.")
-            raise ZeroDivisionError("Division by zero is not allowed.")
-calculator = Calculator()
+    def record_data(self, filename):
+        try:
+            data = input("Введіть дані: ")
+            self.logger.info(f"Введені дані: {data}")
+            with open(filename, 'w') as file:
+                file.write(data)
+            self.logger.info(f"Дані успішно записано у файл {filename}")
+        except Exception as e:
+            self.logger.error(f"Помилка запису даних у файл {filename}: {str(e)}")
 
 
-result1 = calculator.add(5, 3)
-result2 = calculator.subtract(10, 4)
-result3 = calculator.multiply(6, 2)
-result4 = calculator.divide(15, 5)
-
-print(f"Result 1: {result1}")
-print(f"Result 2: {result2}")
-print(f"Result 3: {result3}")
-print(f"Result 4: {result4}")
+recorder = DataRecorder()
+filename = 'data.txt'
+recorder.record_data(filename)
